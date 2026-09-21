@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Vonk Printshop
+
+   Eén palet, afgeleid van Vonks eigen huisstijl (logo.svg en main.css op
+   vonknh.nl): magenta #e50075 en amber #f8ab21, met het radiale verloop
+   daartussen. De neutralen zijn niet grijs maar heel licht naar magenta
+   getrokken, zodat wit en grijs bij het merk horen in plaats van eronder te
+   liggen.
+
+   De site staat bewust in één lichte wereld. Een printshop laat papier en
+   filament zien; die kleuren kloppen alleen op wit. Daarom geen donkere
+   variant, maar wel overal expliciete kleuren, zodat de pagina niet de
+   achtergrond van de browser leent.
+--------------------------------------------------------------------------- */
+
+:root {
+  --papier: #ffffff;
+  --papier-zacht: #f8f6f7;
+  --papier-diep: #f1eef0;
+  --inkt: #17131a;
+  --inkt-zacht: #6c626a;
+  --rand: #e7e1e5;
+  --rand-sterk: #d5cdd2;
+
+  --magenta: #e50075;
+  --magenta-diep: #b8005e;
+  --amber: #f8ab21;
+
+  --vonk: linear-gradient(
+    100deg,
+    #f8ab21 0%,
+    #f7a523 12%,
+    #f5952b 27%,
+    #f27a38 44%,
+    #ee564a 62%,
+    #e92761 82%,
+    #e50075 100%
+  );
+}
+
+@theme inline {
+  --color-papier: var(--papier);
+  --color-papier-zacht: var(--papier-zacht);
+  --color-papier-diep: var(--papier-diep);
+  --color-inkt: var(--inkt);
+  --color-inkt-zacht: var(--inkt-zacht);
+  --color-rand: var(--rand);
+  --color-rand-sterk: var(--rand-sterk);
+  --color-magenta: var(--magenta);
+  --color-magenta-diep: var(--magenta-diep);
+  --color-amber: var(--amber);
+
+  --font-sans: var(--font-figtree);
+  --font-mono: var(--font-mono-code);
+}
+
+* {
+  border-color: var(--rand);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--papier);
+  color: var(--inkt);
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv05" 1;
+}
+
+/* Koppen staan strak op elkaar en breken op een leesbare plek. De maat komt
+   uit clamp(), zodat er geen sprong zit tussen telefoon en scherm. */
+.kop {
+  font-weight: 600;
+  letter-spacing: -0.033em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.kop-xl { font-size: clamp(2.75rem, 7.2vw, 5.75rem); }
+.kop-l  { font-size: clamp(2.1rem, 4.6vw, 3.5rem); }
+.kop-m  { font-size: clamp(1.5rem, 2.6vw, 2.125rem); }
+
+/* Het mono-label boven een blok. Klein, kapitaal, ruim gespatieerd: dat is de
+   technische stem van deze site en het enige plekje waar hoofdletters staan. */
+.label {
+  font-family: var(--font-mono-code), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cijfers {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.vonk-tekst {
+  background: var(--vonk);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vonk-vlak { background: var(--vonk); }
+
+/* Een haarlijn die aan beide kanten uitdooft. Geeft een sectiegrens zonder
+   dat er een streep dwars door de pagina knalt. */
+.scheiding {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--rand) 12%,
+    var(--rand) 88%,
+    transparent
+  );
+}
+
+::selection {
+  background: var(--magenta);
+  color: #fff;
+}
+
+:focus-visible:not(.ring-om-het-kader) {
+  outline: 2px solid var(--magenta);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* Zit een veld in een kader dat zelf al een ring krijgt (een invoerveld met de
+   eenheid ernaast), dan hoort de ring om het hele kader en niet om het stukje
+   waar je in typt. Deze regel staat buiten Tailwinds lagen en wint daardoor van
+   elke utility, dus de uitzondering moet hier staan en niet in de klassenlijst. */
+.ring-om-het-kader:focus-visible {
+  outline: none;
+}
+
+/* Wat de gebruiker niet ziet maar een schermlezer wel. */
+.enkel-voorlezen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* De pijltjes van een getalveld verschijnen pas bij focus en duwen dan de
+   eenheid ernaast het kader uit. We tellen zelf al met knoppen, dus weg ermee. */
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}

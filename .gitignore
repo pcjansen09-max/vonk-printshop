@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+.DS_Store
+*.pem
+npm-debug.log*
+.env*
+!.env.example
+.vercel
+next-env.d.ts
+
+# Door tsc bijgehouden, hoort niet in de geschiedenis.
+tsconfig.tsbuildinfo
